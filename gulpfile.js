@@ -10,11 +10,13 @@ var aws = require('gulp-awspublish'),
     mocha = require('gulp-mocha'),
     mochaPhantomJS = require('gulp-mocha-phantomjs'),
     moment = require('moment'),
+    pump = require('pump'),
     rename = require('gulp-rename'),
     replace = require('gulp-replace'),
     squash = require('gulp-remove-empty-lines'),
     strip = require('gulp-strip-comments'),
-    transform = require('vinyl-transform');
+    transform = require('vinyl-transform'),
+    uglify = require('gulp-uglify');
 
 // -------------------------
 // Build tasks
@@ -23,38 +25,27 @@ var aws = require('gulp-awspublish'),
 gulp.task('build', ['build:browserify', 'build:minify']);
 
 gulp.task('build:browserify', function() {
-  return gulp.src([
-      './src/keen.js',
-      './src/keen-tracker.js',
-      './src/keen-query.js',
-      './src/keen-c3.js'
-    ])
+  return gulp.src([ './lib/index.js' ])
     .pipe(transform(function(filename) {
       var b = browserify(filename);
-      return b.bundle();
+      return b.bundle({ standalone: 'Keen' });
     }))
-    // Clean out nested AMD defintions
-    .pipe(replace('(isLoader)', '(false)'))
-    .pipe(replace('define(function () {', '(function(){'))
-    .pipe(replace('define(definition)', '{}'))
-    .pipe(replace('define(factory)', '{}'))
-    // Clean up source
     .pipe(strip({ line: true }))
     .pipe(squash())
+    .pipe(rename('keen.js'))
     .pipe(gulp.dest('./dist/'));
+    // .pipe(compress({ type: 'js' }))
+    // .pipe(rename({ suffix: '.min' }))
+    // .pipe(gulp.dest('./dist/'));
 });
 
-gulp.task('build:minify', ['build:browserify'], function(){
-  return gulp.src([
-      './dist/keen.js',
-      './dist/keen-tracker.js',
-      './dist/keen-query.js',
-      './dist/keen-c3.js'
-      // './src/loader.js'
-    ])
-    .pipe(compress({ type: 'js' }))
-    .pipe(rename({ suffix: '.min' }))
-    .pipe(gulp.dest('./dist/'));
+gulp.task('build:minify', ['build:browserify'], function(cb){
+  pump([
+    gulp.src([ './dist/keen.js' ]),
+    uglify(),
+    rename({ suffix: '.min' }),
+    gulp.dest('./dist/')
+  ], cb);
 });
 
 gulp.task('connect', ['build'], function () {
