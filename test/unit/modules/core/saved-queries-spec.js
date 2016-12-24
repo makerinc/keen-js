@@ -1,7 +1,7 @@
 var expect = require("chai").expect;
 var JSON2 = require("JSON2");
 
-var Keen = require("../../../../src/server");
+var Keen = require("../../../../lib/index");
 var keenHelper = require("../../helpers/test-config");
 var mock = require("../../helpers/mockServerRequests");
 

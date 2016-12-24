@@ -4,7 +4,7 @@ var chai = require("chai"),
 
 chai.use(spies);
 
-var Keen = require("../../../../src/core");
+var Keen = require("../../../../lib/index");
 
 describe("Keen.Events system", function(){
 
@@ -19,7 +19,7 @@ describe("Keen.Events system", function(){
     it("should call bound functions when triggered", function(){
       var callback = chai.spy();
       Keen.on("whatever", callback);
-      Keen.trigger("whatever");
+      Keen.emit("whatever");
       expect(callback).to.have.been.called.once;
     });
 
@@ -27,16 +27,16 @@ describe("Keen.Events system", function(){
       var callback = chai.spy(),
       payload = { status: "ok" };
       Keen.on("whatever", callback);
-      Keen.trigger("whatever", payload);
+      Keen.emit("whatever", payload);
       expect(callback).to.have.been.called.once.with(payload);
     });
 
     it("should call bound functions multiple when triggered multiple times", function(){
       var callback = chai.spy();
       Keen.on("whatever", callback);
-      Keen.trigger("whatever");
-      Keen.trigger("whatever");
-      Keen.trigger("whatever");
+      Keen.emit("whatever");
+      Keen.emit("whatever");
+      Keen.emit("whatever");
       expect(callback).to.have.been.called.exactly(3);
     });
   });
@@ -47,7 +47,7 @@ describe("Keen.Events system", function(){
       Keen.on("whatever", callback);
       Keen.on("whatever", callback);
       Keen.off("whatever");
-      Keen.trigger("whatever");
+      Keen.emit("whatever");
       expect(callback).to.not.have.been.called.once;
     });
 
@@ -59,7 +59,7 @@ describe("Keen.Events system", function(){
       Keen.on("whatever", callback);
       Keen.on("whatever", fakeback);
       Keen.off("whatever", fakeback);
-      Keen.trigger("whatever");
+      Keen.emit("whatever");
       expect(callback).to.have.been.called.once;
     });
   });
@@ -71,10 +71,10 @@ describe("Keen.Events system", function(){
       var callbackB = chai.spy();
       Keen.once('event', callbackA);
       Keen.once('event', callbackB);
-      Keen.trigger('event');
+      Keen.emit('event');
       expect(callbackA).to.have.been.called.once;
       expect(callbackB).to.have.been.called.once;
-      Keen.trigger('event');
+      Keen.emit('event');
       expect(callbackA).to.have.been.called.once;
       expect(callbackB).to.have.been.called.once;
     });

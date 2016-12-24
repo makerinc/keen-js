@@ -1,6 +1,6 @@
 var expect = require("chai").expect;
 
-var Keen = require("../../../../src/core"),
+var Keen = require("../../../../lib/index"),
     keenHelper = require("../../helpers/test-config");
 
 describe("Keen.Query", function() {

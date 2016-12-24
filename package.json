@@ -1,6 +1,6 @@
 {
   "name": "keen-js",
-  "version": "4.0.0",
+  "version": "4.0.0-pr1",
   "license": "MIT",
   "main": "src/server/index.js",
   "browser": "src/keen.js",
@@ -24,9 +24,9 @@
     ]
   },
   "dependencies": {
-    "keen-analysis": "^1.1.0",
-    "keen-dataviz": "^1.0.2",
-    "keen-tracking": "^1.0.3"
+    "keen-analysis": "1.2.2",
+    "keen-dataviz": "1.1.0",
+    "keen-tracking": "1.1.2"
   },
   "devDependencies": {
     "browserify": "^8.0.3",

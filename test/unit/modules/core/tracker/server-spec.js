@@ -5,7 +5,7 @@ var chai = require("chai"),
 
 chai.use(spies);
 
-var Keen = require("../../../../../src/server"),
+var Keen = require("../../../../../lib/index"),
     keenHelper = require("../../../helpers/test-config"),
     mock = require("../../../helpers/mockServerRequests");
 

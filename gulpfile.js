@@ -25,18 +25,18 @@ var aws = require('gulp-awspublish'),
 gulp.task('build', ['build:browserify', 'build:minify']);
 
 gulp.task('build:browserify', function() {
-  return gulp.src([ './lib/index.js' ])
+  return gulp.src([ './lib/browser.js' ])
     .pipe(transform(function(filename) {
       var b = browserify(filename);
-      return b.bundle({ standalone: 'Keen' });
+      return b.bundle();
     }))
     .pipe(strip({ line: true }))
     .pipe(squash())
     .pipe(rename('keen.js'))
+    .pipe(gulp.dest('./dist/'))
+    .pipe(compress({ type: 'js' }))
+    .pipe(rename({ suffix: '.min' }))
     .pipe(gulp.dest('./dist/'));
-    // .pipe(compress({ type: 'js' }))
-    // .pipe(rename({ suffix: '.min' }))
-    // .pipe(gulp.dest('./dist/'));
 });
 
 gulp.task('build:minify', ['build:browserify'], function(cb){

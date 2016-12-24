@@ -36,52 +36,52 @@ describe("Keen.Dataset", function(){
       expect(this.ds).to.be.an.instanceof(Keen.Dataset);
     });
     it("should output the correct values", function(){
-      expect(this.ds.output()).to.be.an("array")
+      expect(this.ds.data()).to.be.an("array")
         .and.to.be.of.length(2);
-      expect(this.ds.output()[0][0]).to.eql("label");
-      expect(this.ds.output()[0][1]).to.eql("value");
-      expect(this.ds.output()[1][0]).to.eql("result");
-      expect(this.ds.output()[1][1]).to.eql(23456);
+      expect(this.ds.data()[0][0]).to.eql("label");
+      expect(this.ds.data()[0][1]).to.eql("value");
+      expect(this.ds.data()[1][0]).to.eql("result");
+      expect(this.ds.data()[1][1]).to.eql(23456);
     });
   });
 
-  describe("#input", function() {
-    it("should set and get a copy of raw data", function(){
-      var data = { value: 0 };
-      this.ds.input(data);
-      expect(this.ds.input()).to.be.an("object")
-        .and.to.eql(data);
-    });
-    it("should unset this copy by passing null", function(){
-      this.ds.input(null);
-      expect(this.ds.input()).to.be.null;
-    });
-  });
+  // describe("#input", function() {
+  //   it("should set and get a copy of raw data", function(){
+  //     var data = { value: 0 };
+  //     this.ds.input(data);
+  //     expect(this.ds.input()).to.be.an("object")
+  //       .and.to.eql(data);
+  //   });
+  //   it("should unset this copy by passing null", function(){
+  //     this.ds.input(null);
+  //     expect(this.ds.input()).to.be.null;
+  //   });
+  // });
 
-  describe("#output", function() {
-    it("should set and get a copy of output data", function(){
-      var data = [["Header"][125]];
-      this.ds.output(data);
-      expect(this.ds.output()).to.be.an("array")
-        .and.to.eql(data);
-    });
-    it("should unset this copy by passing null", function(){
-      this.ds.output(null);
-      expect(this.ds.output()).to.be.null;
-    });
-  });
+  // describe("#output", function() {
+  //   it("should set and get a copy of output data", function(){
+  //     var data = [["Header"][125]];
+  //     this.ds.output(data);
+  //     expect(this.ds.data()).to.be.an("array")
+  //       .and.to.eql(data);
+  //   });
+  //   it("should unset this copy by passing null", function(){
+  //     this.ds.output(null);
+  //     expect(this.ds.data()).to.be.null;
+  //   });
+  // });
 
-  describe("#method", function() {
-    it("should set and get the parser method", function(){
-      this.ds.method("select");
-      expect(this.ds.method()).to.be.a("string")
-        .and.to.eql("select");
-    });
-    it("should unset this copy by passing null", function(){
-      this.ds.method(null);
-      expect(this.ds.method()).to.be.null;
-    });
-  });
+  // describe("#method", function() {
+  //   it("should set and get the parser method", function(){
+  //     this.ds.method("select");
+  //     expect(this.ds.method()).to.be.a("string")
+  //       .and.to.eql("select");
+  //   });
+  //   it("should unset this copy by passing null", function(){
+  //     this.ds.method(null);
+  //     expect(this.ds.method()).to.be.null;
+  //   });
+  // });
 
 
   describe("Access Rows", function(){
@@ -317,14 +317,14 @@ describe("Keen.Dataset", function(){
         var table = [["Index", "A", "B"],[0, 342, 664],[1, 353, 322]];
         this.ds.output(table);
         this.ds.deleteRow(1);
-        expect(this.ds.output()).to.be.an("array")
+        expect(this.ds.data()).to.be.an("array")
           .and.to.have.length(2);
       });
       it("should accept a string query argument, even if string starts with a number (indexOf match)", function(){
         var table = [["Index", "A", "B"],["1 a", 342, 664],["2 b", 353, 322]];
         this.ds.output(table);
         this.ds.deleteRow("1 a");
-        expect(this.ds.output()).to.be.an("array")
+        expect(this.ds.data()).to.be.an("array")
           .and.to.have.length(2);
       });
     });
@@ -342,9 +342,9 @@ describe("Keen.Dataset", function(){
           }
           return total < 11;
         });
-        expect(this.ds.output()).to.be.an("array")
+        expect(this.ds.data()).to.be.an("array")
           .and.to.have.length(2);
-        expect(this.ds.output()[1][1]).to.be.a("number")
+        expect(this.ds.data()[1][1]).to.be.a("number")
           .and.to.eql(5);
       });
     });
@@ -359,27 +359,27 @@ describe("Keen.Dataset", function(){
         ]);
       });
       it("should sort rows properly, without calling a comparator", function(){
-        expect(this.ds.sortRows("asc").output()[1][0]).to.eql(0);
-        expect(this.ds.sortRows("desc").output()[1][0]).to.eql(2);
+        expect(this.ds.sortRows("asc").data()[1][0]).to.eql(0);
+        expect(this.ds.sortRows("desc").data()[1][0]).to.eql(2);
       });
       it("should sort rows properly, when calling a general comparator (sum)", function(){
         expect(this.ds
           .sortRows("asc", this.ds.sum, 1)
-          .output()[1][0])
+          .data()[1][0])
         .to.eql(0);
         expect(this.ds
           .sortRows("desc", this.ds.sum, 1)
-          .output()[1][0])
+          .data()[1][0])
         .to.eql(2);
       });
       it("should sort rows ascending, when calling a specific comparator (getRowSum)", function(){
         expect(this.ds
           .sortRows("asc", this.ds.getRowSum)
-          .output()[1][0])
+          .data()[1][0])
         .to.eql(0);
         expect(this.ds
           .sortRows("desc", this.ds.getRowSum)
-          .output()[1][0])
+          .data()[1][0])
         .to.eql(2);
       });
       it("should sort rows ascending, when calling a custom comparator", function(){
@@ -388,11 +388,11 @@ describe("Keen.Dataset", function(){
         };
         expect(this.ds
           .sortRows("asc", demo)
-          .output()[1][0])
+          .data()[1][0])
         .to.eql(0);
         expect(this.ds
           .sortRows("desc", demo)
-          .output()[1][0])
+          .data()[1][0])
         .to.eql(2);
       });
     });
@@ -596,22 +596,22 @@ describe("Keen.Dataset", function(){
         var table = [["Index", "A", "B"],[0, 342, 664],[1, 353, 322]];
         this.ds.output(table);
         this.ds.deleteColumn(1);
-        expect(this.ds.output()).to.be.an("array")
+        expect(this.ds.data()).to.be.an("array")
           .and.to.have.length(3);
-        expect(this.ds.output()[0]).to.be.an("array")
+        expect(this.ds.data()[0]).to.be.an("array")
           .and.to.have.length(2);
-        expect(this.ds.output()[0][1]).to.be.a("string")
+        expect(this.ds.data()[0][1]).to.be.a("string")
           .and.to.eql("B");
       });
       it("should accept a string query argument, even if string starts with a number (indexOf match)", function(){
         var table = [["Index", "1A", "2B"],["b", 342, 664],["b", 353, 322]];
         this.ds.output(table);
         this.ds.deleteColumn("1A");
-        expect(this.ds.output()).to.be.an("array")
+        expect(this.ds.data()).to.be.an("array")
           .and.to.have.length(3);
-        expect(this.ds.output()[0]).to.be.an("array")
+        expect(this.ds.data()[0]).to.be.an("array")
           .and.to.have.length(2);
-        expect(this.ds.output()[0][1]).to.be.a("string")
+        expect(this.ds.data()[0][1]).to.be.a("string")
           .and.to.eql("2B");
       });
     });
@@ -630,11 +630,11 @@ describe("Keen.Dataset", function(){
           }
           return total > 15;
         });
-        expect(this.ds.output()).to.be.an("array")
+        expect(this.ds.data()).to.be.an("array")
           .and.to.have.length(3);
-        expect(this.ds.output()[0]).to.be.an("array")
+        expect(this.ds.data()[0]).to.be.an("array")
           .and.to.have.length(2);
-        expect(this.ds.output()[0][1]).to.be.a("string")
+        expect(this.ds.data()[0][1]).to.be.a("string")
           .and.to.eql("B");
       });
     });
@@ -651,28 +651,28 @@ describe("Keen.Dataset", function(){
       });
       it("should sort columns properly, without calling a comparator", function(){
         this.ds.sortColumns("asc");
-        expect(this.ds.output()[0][1]).to.eql("A");
+        expect(this.ds.data()[0][1]).to.eql("A");
         this.ds.sortColumns("desc");
-        expect(this.ds.output()[0][1]).to.eql("C");
+        expect(this.ds.data()[0][1]).to.eql("C");
       });
       it("should sort columns properly, when calling a general comparator (sum)", function(){
         expect(this.ds
           .sortColumns("asc", this.ds.sum, 1)
-          .output()[0][1])
+          .data()[0][1])
         .to.eql("A");
         expect(this.ds
           .sortColumns("desc", this.ds.sum, 1)
-          .output()[0][1])
+          .data()[0][1])
         .to.eql("C");
       });
       it("should sort columns ascending, when calling a specific comparator (getColumnSum)", function(){
         expect(this.ds
           .sortColumns("asc", this.ds.getColumnSum)
-          .output()[0][1])
+          .data()[0][1])
         .to.eql("A");
         expect(this.ds
           .sortColumns("desc", this.ds.getColumnSum)
-          .output()[0][1])
+          .data()[0][1])
         .to.eql("C");
       });
       it("should sort columns ascending, when calling a custom comparator", function(){
@@ -681,11 +681,11 @@ describe("Keen.Dataset", function(){
         };
         expect(this.ds
           .sortColumns("asc", demo)
-          .output()[0][1])
+          .data()[0][1])
         .to.eql("A");
         expect(this.ds
           .sortColumns("desc", demo)
-          .output()[0][1])
+          .data()[0][1])
         .to.eql("C");
       });
     });
@@ -830,62 +830,62 @@ describe("Keen.Dataset", function(){
       var parser = Keen.Dataset.parser('metric');
       var dataset = parser(data_metric);
 
-      expect(dataset.output())
+      expect(dataset.data())
         .to.be.an('array')
         .and.to.be.of.length(2);
-      expect(dataset.output()[0][0]).to.eql('Index');
-      expect(dataset.output()[0][1]).to.eql('Value');
-      expect(dataset.output()[1][0]).to.eql('Result');
-      expect(dataset.output()[1][1]).to.eql(2450);
+      expect(dataset.data()[0][0]).to.eql('Index');
+      expect(dataset.data()[0][1]).to.eql('Value');
+      expect(dataset.data()[1][0]).to.eql('Result');
+      expect(dataset.data()[1][1]).to.eql(2450);
     });
 
     it('interval.json (indexed by timeframe.end)', function(){
       var parser = Keen.Dataset.parser('interval', 'timeframe.end');
       var dataset = parser(data_interval);
 
-      expect(dataset.output()).to.be.an('array')
+      expect(dataset.data()).to.be.an('array')
         .and.to.be.of.length(13);
-      expect(dataset.output()[0]).to.be.of.length(2);
-      expect(dataset.output()[0][0]).to.eql('Index');
-      expect(dataset.output()[0][1]).to.eql('Result');
+      expect(dataset.data()[0]).to.be.of.length(2);
+      expect(dataset.data()[0][0]).to.eql('Index');
+      expect(dataset.data()[0][1]).to.eql('Result');
 
       // timeframe.end
-      expect(dataset.output()[1][0])
+      expect(dataset.data()[1][0])
         .to.eql('2015-01-01T00:00:00.000Z');
     });
 
     it('groupby.json', function(){
       var dataset = Keen.Dataset.parser('grouped-metric')(data_groupBy);
 
-      expect(dataset.output()).to.be.an('array')
+      expect(dataset.data()).to.be.an('array')
         .and.to.be.of.length(56);
-      expect(dataset.output()[0]).to.be.of.length(2);
-      expect(dataset.output()[0][0]).to.eql('Index');
-      expect(dataset.output()[0][1]).to.eql('Result');
+      expect(dataset.data()[0]).to.be.of.length(2);
+      expect(dataset.data()[0][0]).to.eql('Index');
+      expect(dataset.data()[0][1]).to.eql('Result');
     });
 
     it('groupBy-boolean.json', function(){
       var dataset = Keen.Dataset.parser('grouped-metric')(data_groupBy_boolean);
       dataset.sortRows('desc', dataset.sum, 1);
 
-      expect(dataset.output()).to.be.an('array')
+      expect(dataset.data()).to.be.an('array')
         .and.to.be.of.length(4);
-      expect(dataset.output()[1][0]).to.eql('true');
-      expect(dataset.output()[2][0]).to.eql('false');
+      expect(dataset.data()[1][0]).to.eql('true');
+      expect(dataset.data()[2][0]).to.eql('false');
     });
 
     it('interval-groupBy-empties.json', function(){
       var dataset = Keen.Dataset.parser('grouped-interval')(data_interval_groupBy_empties);
-      expect(dataset.output()).to.be.an('array')
+      expect(dataset.data()).to.be.an('array')
         .and.to.be.of.length(7);
     });
 
     it('interval-groupBy-boolean.json (indexed by timeframe.end)', function(){
       var parser = Keen.Dataset.parser('grouped-interval', 'timeframe.end');
       var dataset = parser(data_interval_groupBy_boolean);
-      expect(dataset.output()).to.be.an('array')
+      expect(dataset.data()).to.be.an('array')
         .and.to.be.of.length(7);
-      expect(dataset.output()[1][0])
+      expect(dataset.data()[1][0])
         .to.eql('2013-11-01T07:00:00.000Z');
     });
 
@@ -895,30 +895,30 @@ describe("Keen.Dataset", function(){
       dataset.sortColumns('desc', dataset.sum, 1);
       dataset.sortRows('asc');
 
-      expect(dataset.output()).to.be.an('array')
+      expect(dataset.data()).to.be.an('array')
         .and.to.be.of.length(7);
-      expect(dataset.output()[0]).to.be.of.length(3);
-      expect(dataset.output()[0][0]).to.eql('Index');
-      expect(dataset.output()[0][1]).to.eql('null');
-      expect(dataset.output()[0][2]).to.eql('Windows Vista');
+      expect(dataset.data()[0]).to.be.of.length(3);
+      expect(dataset.data()[0][0]).to.eql('Index');
+      expect(dataset.data()[0][1]).to.eql('null');
+      expect(dataset.data()[0][2]).to.eql('Windows Vista');
     });
 
     it('extraction.json 1', function(){
       var dataset = Keen.Dataset.parser('extraction')(data_extraction);
 
-      expect(dataset.output())
+      expect(dataset.data())
         .to.be.an('array')
         .and.to.be.of.length(data_extraction.result.length+1);
-      expect(dataset.output()[0]).to.be.of.length(7);
-      expect(dataset.output()[0][0]).to.eql('keen.timestamp');
-      expect(dataset.output()[0][1]).to.eql('keen.created_at');
-      expect(dataset.output()[0][2]).to.eql('keen.id');
+      expect(dataset.data()[0]).to.be.of.length(7);
+      expect(dataset.data()[0][0]).to.eql('keen.timestamp');
+      expect(dataset.data()[0][1]).to.eql('keen.created_at');
+      expect(dataset.data()[0][2]).to.eql('keen.id');
     });
 
     it('extraction-uneven.json', function(){
       var dataset = Keen.Dataset.parser('extraction')(data_extraction_uneven);
 
-      expect(dataset.output())
+      expect(dataset.data())
         .to.be.an('array')
         .and.to.be.of.length(data_extraction_uneven.result.length+1);
     });
@@ -926,13 +926,13 @@ describe("Keen.Dataset", function(){
     it('funnel.json', function(){
       var dataset = Keen.Dataset.parser('funnel')(data_funnel);
 
-      expect(dataset.output())
+      expect(dataset.data())
         .to.be.an('array')
         .and.to.be.of.length(6);
-      expect(dataset.output()[0][0]).to.eql('Index');
-      expect(dataset.output()[0][1]).to.eql('Step Value');
-      expect(dataset.output()[1][0]).to.be.eql('pageview');
-      expect(dataset.output()[1][1]).to.be.eql(42);
+      expect(dataset.data()[0][0]).to.eql('Index');
+      expect(dataset.data()[0][1]).to.eql('Step Value');
+      expect(dataset.data()[1][0]).to.be.eql('pageview');
+      expect(dataset.data()[1][1]).to.be.eql(42);
     });
 
     it('double-groupBy.json', function(){
@@ -941,9 +941,9 @@ describe("Keen.Dataset", function(){
         'session.geo_information.province' ]);
       var dataset = parser(data_double_groupBy);
 
-      expect(dataset.output()).to.be.an('array')
+      expect(dataset.data()).to.be.an('array')
         .and.to.be.of.length(194);
-      expect(dataset.output()[0])
+      expect(dataset.data()[0])
         .to.be.of.length(2);
     });
 
@@ -953,9 +953,9 @@ describe("Keen.Dataset", function(){
         'second.property' ], 'timeframe.end');
       var dataset = parser(data_interval_double_groupBy);
 
-      expect(dataset.output()).to.be.an('array')
+      expect(dataset.data()).to.be.an('array')
         .and.to.be.of.length(4);
-      expect(dataset.output()[0]).to.be.an('array')
+      expect(dataset.data()[0]).to.be.an('array')
         .and.to.be.of.length(5);
       expect(dataset.selectColumn(0)[1]).to.be.a('string')
         .and.to.eql('2014-04-23T07:00:00.000Z');
@@ -964,7 +964,7 @@ describe("Keen.Dataset", function(){
     it('select-unique.json', function(){
       var dataset = Keen.Dataset.parser('list')(data_uniques);
 
-      expect(dataset.output()).to.be.an('array')
+      expect(dataset.data()).to.be.an('array')
         .and.to.be.of.length(60);
     });
 
