@@ -4,7 +4,7 @@ var getContext = require('../helpers/get-context'),
     getXHR = require('../helpers/get-xhr-object'),
     responseHandler = require('../helpers/superagent-handle-response');
 
-module.exports = function(path, params, callback){
+module.exports = function(path, params, callback, headers){
   var url = this.client.url(path);
 
   if (!this.client.projectId()) {
@@ -22,6 +22,7 @@ module.exports = function(path, params, callback){
       .post(url)
         .set('Content-Type', 'application/json')
         .set('Authorization', this.client.readKey())
+        .set(headers)
         .timeout(this.timeout())
         .send(params || {})
         .end(handleResponse);

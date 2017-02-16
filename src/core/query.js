@@ -10,12 +10,14 @@ function Query(){
 };
 Emitter(Query.prototype);
 
-Query.prototype.configure = function(analysisType, params) {
+Query.prototype.configure = function(analysisType, params, headers) {
   this.analysis = analysisType;
 
   // Apply params w/ #set method
   this.params = this.params || {};
   this.set(params);
+
+  this.headers = this.headers || {};
 
   // Localize timezone if none is set
   if (this.params.timezone === void 0) {

@@ -81,7 +81,7 @@ Request.prototype.refresh = function(){
         sendSavedQuery.call(self, path, {}, cbSequencer);
       }
       else {
-        sendQuery.call(self, path, query.params, cbSequencer);
+        sendQuery.call(self, path, query.params, cbSequencer, query.headers);
       }
     }
     else {
