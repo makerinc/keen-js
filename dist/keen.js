@@ -2737,7 +2737,7 @@ Query.prototype.configure = function(analysisType, params, headers) {
   this.analysis = analysisType;
   this.params = this.params || {};
   this.set(params);
-  this.headers = this.headers || {};
+  this.headers = headers || {};
   if (this.params.timezone === void 0) {
     this.params.timezone = getTimezoneOffset();
   }

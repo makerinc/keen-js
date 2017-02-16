@@ -17,7 +17,7 @@ Query.prototype.configure = function(analysisType, params, headers) {
   this.params = this.params || {};
   this.set(params);
 
-  this.headers = this.headers || {};
+  this.headers = headers || {};
 
   // Localize timezone if none is set
   if (this.params.timezone === void 0) {
